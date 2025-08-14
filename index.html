@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>MBTI 자가진단 테스트</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #fef9f4;
+      color: #444;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    h1 {
+      text-align: center;
+      color: #7e6eaa;
+    }
+
+    .question {
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 10px;
+      background: #f3f0ff;
+    }
+
+    .question h3 {
+      margin-bottom: 15px;
+    }
+
+    .options button {
+      background-color: #d6e6f2;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .options button:hover {
+      background-color: #a9cce3;
+    }
+
+    .options button.selected {
+      background-color: #7fb3d5;
+      color: white;
+    }
+
+    #result {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #5c5470;
+    }
+
+    #submitBtn {
+      display: block;
+      margin: 30px auto;
+      background-color: #c3aed6;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #submitBtn:hover {
+      background-color: #a085b2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>MBTI 자가진단 테스트</h1>
+
+    <form id="mbtiForm">
+      <!-- 질문들 -->
+      <div class="question" data-dimension="EI">
+        <h3>1. 사람들과 함께 있을 때 나는?</h3>
+        <div class="options">
+          <button type="button" data-value="E">활력이 생긴다</button>
+          <button type="button" data-value="I">피곤하고 혼자 있고 싶다</button>
+        </div>
+      </div>
+
+      <div class="question" data-dimension="SN">
+        <h3>2. 정보를 처리할 때 나는?</h3>
+        <div class="options">
+          <button type="button" data-value="S">사실과 경험을 중시한다</button>
+          <button type="button" data-value="N">아이디어와 가능성을 본다</button>
+        </div>
+      </div>
+
+      <div class="question" data-dimension="TF">
+        <h3>3. 결정을 내릴 때 나는?</h3>
+        <div class="options">
+          <button type="button" data-value="T">논리적으로 판단한다</button>
+          <button type="button" data-value="F">상대의 감정을 고려한다</button>
+        </div>
+      </div>
+
+      <div class="question" data-dimension="JP">
+        <h3>4. 일정을 계획할 때 나는?</h3>
+        <div class="options">
+          <button type="button" data-value="J">계획적으로 미리 한다</button>
+          <button type="button" data-value="P">유동적으로, 그때그때 처리한다</button>
+        </div>
+      </div>
+
+      <button id="submitBtn" type="button">결과 보기</button>
+    </form>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('mbtiForm');
+    const resultBox = document.getElementById('result');
+
+    // 버튼 선택 처리
+    document.querySelectorAll('.options button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const parent = btn.parentNode;
+        // 하나만 선택되게
+        parent.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+
+    document.getElementById('submitBtn').addEventListener('click', () => {
+      const answers = { EI: '', SN: '', TF: '', JP: '' };
+
+      document.querySelectorAll('.question').forEach(q => {
+        const dimension = q.dataset.dimension;
+        const selected = q.querySelector('button.selected');
+        if (selected) {
+          answers[dimension] = selected.dataset.value;
+        }
+      });
+
+      if (Object.values(answers).some(v => v === '')) {
+        resultBox.textContent = '모든 질문에 답해주세요!';
+        return;
+      }
+
+      const mbti = answers.EI + answers.SN + answers.TF + answers.JP;
+      resultBox.textContent = `당신의 MBTI는 ${mbti}입니다!`;
+    });
+  </script>
+</body>
+</html>
